@@ -1,4 +1,4 @@
-#run this first
-npm install tailwindcss @tailwindcss/vite
-npm install -D @types/node
-npx shadcn@latest init
+## run this first
+1. npm install tailwindcss @tailwindcss/vite
+2. npm install -D @types/node
+3. npx shadcn@latest init
