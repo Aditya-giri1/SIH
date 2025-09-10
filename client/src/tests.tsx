@@ -6,7 +6,7 @@ import { Progress } from "@/components/ui/progress";
 // Screening Tool: PHQ-9, GAD-7, GHQ-12 with polished UI & progress indicators
 // Uses Tailwind + shadcn/ui for better aesthetics and usability
 
-type Questionnaire = "PHQ-9" | "GAD-7" | "GHQ-12";
+type Questionnaire = "PHQ-9" | "GAD-7";
 
 const PHQ9_QUESTIONS = [
   "Little interest or pleasure in doing things",
@@ -30,20 +30,7 @@ const GAD7_QUESTIONS = [
   "Feeling afraid as if something awful might happen",
 ];
 
-const GHQ12_QUESTIONS = [
-  "Been able to concentrate on whatever you're doing",
-  "Lost much sleep over worry",
-  "Felt that you are playing a useful part in things",
-  "Felt capable of making decisions about things",
-  "Felt constantly under strain",
-  "Felt you couldn't overcome your difficulties",
-  "Been able to enjoy your normal day-to-day activities",
-  "Been able to face up to your problems",
-  "Been feeling unhappy and depressed",
-  "Been losing confidence in yourself",
-  "Been thinking of yourself as a worthless person",
-  "Been feeling reasonably happy, all things considered",
-];
+
 
 const OPTIONS = [
   { label: "Not at all", value: 0 },
@@ -57,22 +44,18 @@ export default function ScreeningTool() {
 
   const [phqAnswers, setPhqAnswers] = useState<(number | undefined)[]>(new Array(PHQ9_QUESTIONS.length).fill(undefined));
   const [gadAnswers, setGadAnswers] = useState<(number | undefined)[]>(new Array(GAD7_QUESTIONS.length).fill(undefined));
-  const [ghqAnswers, setGhqAnswers] = useState<(number | undefined)[]>(new Array(GHQ12_QUESTIONS.length).fill(undefined));
+ 
 
   function setAnswer(q: Questionnaire, idx: number, value: number) {
     if (q === "PHQ-9") {
       const arr = [...phqAnswers];
       arr[idx] = value;
       setPhqAnswers(arr);
-    } else if (q === "GAD-7") {
+    } else (q === "GAD-7") {
       const arr = [...gadAnswers];
       arr[idx] = value;
       setGadAnswers(arr);
-    } else {
-      const arr = [...ghqAnswers];
-      arr[idx] = value;
-      setGhqAnswers(arr);
-    }
+    } 
   }
 
   function score(arr: (number | undefined)[]) {
@@ -97,25 +80,15 @@ export default function ScreeningTool() {
     return "Minimal or no anxiety (GAD-7 0–4).";
   }
 
-  function scoreGHQBimodal(arr: (number | undefined)[] | null) {
-    if (!arr || arr.some((v) => typeof v !== "number")) return null;
-    return (arr as number[]).reduce((sum, v) => sum + (v >= 2 ? 1 : 0), 0);
-  }
-
-  function scoreGHQLikert(arr: (number | undefined)[] | null) {
-    if (!arr || arr.some((v) => typeof v !== "number")) return null;
-    return (arr as number[]).reduce((a, b) => a + b, 0);
-  }
 
   const phqTotal = score(phqAnswers);
   const gadTotal = score(gadAnswers);
-  const ghqLikert = scoreGHQLikert(ghqAnswers);
-  const ghqBimodal = scoreGHQBimodal(ghqAnswers);
+
 
   function ResetAll() {
     setPhqAnswers(new Array(PHQ9_QUESTIONS.length).fill(undefined));
     setGadAnswers(new Array(GAD7_QUESTIONS.length).fill(undefined));
-    setGhqAnswers(new Array(GHQ12_QUESTIONS.length).fill(undefined));
+
   }
 
   function ProgressIndicator({ answers, total }: { answers: (number | undefined)[]; total: number }) {
@@ -135,7 +108,7 @@ export default function ScreeningTool() {
         <header className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <h1 className="text-3xl font-bold text-indigo-700">Mental Health Screening</h1>
           <div className="flex gap-2 flex-wrap">
-            {["ALL", "PHQ-9", "GAD-7", "GHQ-12"].map((tab) => (
+            {["ALL", "PHQ-9", "GAD-7" ].map((tab) => (
               <Button
                 key={tab}
                 variant={active === tab ? "default" : "outline"}
@@ -205,31 +178,7 @@ export default function ScreeningTool() {
                 </div>
               )}
 
-              {(active === "ALL" || active === "GHQ-12") && (
-                <div>
-                  <h3 className="font-semibold text-lg mb-3 text-indigo-600">GHQ‑12</h3>
-                  <ProgressIndicator answers={ghqAnswers} total={GHQ12_QUESTIONS.length} />
-                  <ol className="space-y-4">
-                    {GHQ12_QUESTIONS.map((q, i) => (
-                      <li key={i} className="flex flex-col gap-2">
-                        <span className="font-medium">{i + 1}. {q}</span>
-                        <div className="flex flex-wrap gap-2">
-                          {OPTIONS.map((opt) => (
-                            <Button
-                              key={opt.value}
-                              variant={ghqAnswers[i] === opt.value ? "default" : "outline"}
-                              size="sm"
-                              onClick={() => setAnswer("GHQ-12", i, opt.value)}
-                            >
-                              {opt.label}
-                            </Button>
-                          ))}
-                        </div>
-                      </li>
-                    ))}
-                  </ol>
-                </div>
-              )}
+              
 
               <div className="flex gap-3">
                 <Button variant="outline" onClick={ResetAll}>Reset</Button>
@@ -255,19 +204,13 @@ export default function ScreeningTool() {
                 <p className="text-sm text-gray-600">{interpretGAD7(gadTotal)}</p>
               </div>
 
-              <div>
-                <h3 className="font-semibold text-indigo-600">GHQ‑12</h3>
-                <p className="text-sm">Likert score (0–36): {ghqLikert === null ? "— incomplete —" : ghqLikert}</p>
-                <p className="text-sm">Bimodal score (0–12): {ghqBimodal === null ? "— incomplete —" : ghqBimodal}</p>
-                <p className="text-xs text-gray-600">Likert gives a continuous measure; bimodal is often used for caseness (thresholds vary by setting).</p>
-              </div>
+              
 
               <div className="pt-3 border-t">
                 <h4 className="font-semibold">Notes</h4>
                 <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
                   <li>These scores are algorithmic calculations of standard instruments and are not a diagnosis.</li>
                   <li>For clinical or research use, follow local governance and consent procedures.</li>
-                  <li>GHQ-12 scoring method varies by study; confirm which method your project requires.</li>
                 </ul>
               </div>
 
@@ -277,7 +220,7 @@ export default function ScreeningTool() {
                   const rows = ["instrument,question_index,answer"];
                   phqAnswers.forEach((v, i) => rows.push(`PHQ-9,${i + 1},${v ?? ""}`));
                   gadAnswers.forEach((v, i) => rows.push(`GAD-7,${i + 1},${v ?? ""}`));
-                  ghqAnswers.forEach((v, i) => rows.push(`GHQ-12,${i + 1},${v ?? ""}`));
+
                   const csv = rows.join("\n");
                   const blob = new Blob([csv], { type: "text/csv" });
                   const url = URL.createObjectURL(blob);
