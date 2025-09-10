@@ -51,7 +51,7 @@ export default function ScreeningTool() {
       const arr = [...phqAnswers];
       arr[idx] = value;
       setPhqAnswers(arr);
-    } else (q === "GAD-7") {
+    } else if (q === "GAD-7") {
       const arr = [...gadAnswers];
       arr[idx] = value;
       setGadAnswers(arr);
