@@ -6,6 +6,7 @@ const FirstAidChat = () => {
     { text: "Hello! I'm your AI First-Aid assistant. How are you feeling today? You can tell me about what's on your mind, like 'I'm feeling stressed' or 'I have trouble sleeping'.", sender: 'bot' },
   ]);
   const [input, setInput] = useState('');
+  const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -13,31 +14,29 @@ const FirstAidChat = () => {
   };
 
   useEffect(scrollToBottom, [messages]);
-  
-  const handleSend = () => {
+
+  const handleSend = async () => {
     if (input.trim() === '') return;
+
     const newMessages = [...messages, { text: input, sender: 'user' }];
     setMessages(newMessages);
     setInput('');
+    setLoading(true);
 
-    setTimeout(() => {
-        const botResponse = getBotResponse(input);
-        setMessages([...newMessages, { text: botResponse, sender: 'bot' }]);
-    }, 1000);
-  };
-  
-  const getBotResponse = (userInput) => {
-    const lowerInput = userInput.toLowerCase();
-    if (lowerInput.includes('stress') || lowerInput.includes('anxiety')) {
-        return "It sounds like you're dealing with a lot of pressure. A helpful technique is the '4-7-8' breathing exercise. Inhale for 4 seconds, hold your breath for 7, and exhale slowly for 8. Would you like to explore more resources on stress management?";
+    try {
+      const response = await fetch('http://127.0.0.1:8001/query', {
+        method: 'POST',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question: input }),
+      });
+
+      const data = await response.json();
+      setMessages([...newMessages, { text: data.answer, sender: 'bot' }]);
+    } catch (error) {
+      setMessages([...newMessages, { text: "⚠️ Sorry, I couldn’t connect to the server. Please try again later.", sender: 'bot' }]);
+    } finally {
+      setLoading(false);
     }
-    if (lowerInput.includes('sleep')) {
-        return "Many students struggle with sleep. It might help to establish a relaxing pre-sleep routine, like reading a book or listening to calming music. Avoiding screens an hour before bed can also make a big difference. I can point you to some sleep audio guides in our resource hub.";
-    }
-    if (lowerInput.includes('sad') || lowerInput.includes('depressed')) {
-        return "I'm sorry to hear you're feeling this way. Please remember that these feelings are valid. It can be very helpful to talk to someone. Would you consider booking a confidential session with a campus counselor? Your well-being is a priority.";
-    }
-    return "Thank you for sharing. It's brave to talk about these things. Remember, there are many resources available here to help you. You can browse the resource hub for self-help guides or book an appointment with a professional for personalized support.";
   };
 
   return (
@@ -50,8 +49,16 @@ const FirstAidChat = () => {
             </div>
           </div>
         ))}
-         <div ref={messagesEndRef} />
+        {loading && (
+          <div className="flex justify-start">
+            <div className="max-w-xs lg:max-w-md px-4 py-3 rounded-2xl bg-white shadow-sm">
+              <p>⏳ Thinking...</p>
+            </div>
+          </div>
+        )}
+        <div ref={messagesEndRef} />
       </div>
+
       <div className="p-4 bg-white border-t border-gray-200">
         <div className="flex items-center space-x-3">
           <input
@@ -62,7 +69,10 @@ const FirstAidChat = () => {
             placeholder="Type your message..."
             className="flex-1 p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
-          <button onClick={handleSend} className="bg-indigo-600 text-white rounded-full p-3 hover:bg-indigo-700 transition-colors">
+          <button
+            onClick={handleSend}
+            className="bg-indigo-600 text-white rounded-full p-3 hover:bg-indigo-700 transition-colors"
+          >
             {icons.send}
           </button>
         </div>
