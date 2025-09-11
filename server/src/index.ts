@@ -200,16 +200,20 @@ wss.on('connection', function connection(ws : websocketprops) {
       peerRoom.push(ws) ;
     }
 
-    if (response.type == "peer_chat"){
-      const userfound =  peerRoom.some((socket : websocketprops) => socket.email == ws.email) ;
-      if (userfound){
-        peerRoom.forEach((socket : websocketprops) => {
-        if (socket.readyState == 1){
-          socket.send(response.payload.message) ;
-        }
-      })
+    if (response.type === "peer_chat") {
+      const userfound = peerRoom.some(
+        (socket: websocketprops) => socket.email === ws.email
+      );
+      if (userfound) {
+        peerRoom.forEach((socket: websocketprops) => {
+          // ✅ send to everyone EXCEPT the sender
+          if (socket.readyState === 1 && socket !== ws) {
+            socket.send(response.payload.message);
+          }
+        });
       }
     }
+
 
     if (response.type == "peer_exit"){
       peerRoom = peerRoom.filter((socket: websocketprops) => socket.email !== ws.email);
