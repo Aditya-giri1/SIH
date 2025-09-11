@@ -1,8 +1,34 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { mockForumPosts } from '../../data/mockData';
+import PeerChat from './peerchatroom';
+import axios from 'axios';
 
 const PeerForum = () => {
     const [viewPost, setViewPost] = useState(null);
+    const [inRoom, setInRoom] = useState(false);
+    const [useremail , setuseremail] = useState("") ;
+    function handleEnterRoom () {
+    setInRoom(true);
+    }
+
+     useEffect(() => {
+     gettingEmail();
+      }, []);
+
+    async function gettingEmail() {
+        const token = localStorage.getItem("token") ;
+        console.log(token) ;
+        const response = await axios.get("http://localhost:3001/forum" , {
+            headers : {
+                Authorization : token ,
+            } ,
+        }) ;
+        console.log("hello33") ;
+        if (response.status == 200){
+            setuseremail(response.data.email) ;
+            console.log(response.data.email)
+        }
+    }
     
     if (viewPost) {
         return (
@@ -37,13 +63,15 @@ const PeerForum = () => {
     }
 
     return (
-        <div className="container mx-auto p-4 sm:p-6 lg:p-8">
+        <div>
+            {!inRoom ? (
+                <div className="container mx-auto p-4 sm:p-6 lg:p-8">
             <div className="flex justify-between items-center mb-6">
                 <div>
                     <h1 className="text-3xl font-bold text-gray-800">Peer Support Forum</h1>
                     <p className="text-gray-600">Connect anonymously with peers. Share, listen, and support each other.</p>
                 </div>
-                <button className="bg-indigo-600 text-white px-5 py-2 rounded-md hover:bg-indigo-700">Start a Discussion</button>
+                <button onClick={handleEnterRoom} className="bg-indigo-600 text-white px-5 py-2 rounded-md hover:bg-indigo-700">Start a Discussion</button>
             </div>
             
             <div className="space-y-4">
@@ -60,6 +88,14 @@ const PeerForum = () => {
                     </div>
                 ))}
             </div>
+        </div>
+            ) : (
+                <PeerChat
+                      email={useremail} // dummy email for testing
+                      roomId="global"
+                      onExit={() => setInRoom(false)}
+                    />
+            )}
         </div>
     );
 };

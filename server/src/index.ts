@@ -8,6 +8,7 @@ import {counselorModel} from "./db"
 import  jwt  from "jsonwebtoken";
 import cors from "cors"
 import "dotenv/config"
+import { Authentication } from "./middleware";
 
 let corsOptions = {
   "origin": "http://localhost:5173",
@@ -67,7 +68,7 @@ app.post('/student/signin' , async(req , res) => {
       message : "No User found"
     })
   }
-  const userId = JSON.stringify(response._id) ;
+  const userId = response.email ;
   const hashedpassword = bcrypt.compareSync(password , response.password) ;
   if (hashedpassword){
     const token = jwt.sign(userId , process.env.JWT_SECRET as string) ;
@@ -156,7 +157,7 @@ app.post("/counselor/login", async (req, res) => {         //counselor login
       return res.json({ message: "Incorrect password" });
     }
 
-    const token = jwt.sign({ id: counselor._id, role: "counselor" }, process.env.JWT_SECRET as string);
+    const token = jwt.sign(counselor._id , process.env.JWT_SECRET as string);
 
     res.json({
       token,
@@ -167,6 +168,14 @@ app.post("/counselor/login", async (req, res) => {         //counselor login
   }
 });
 
+
+app.get("/forum" , Authentication ,  (req , res) => {
+  //@ts-ignore
+  const useremail = req.email ;
+  res.json({
+    email : useremail
+  })
+})
 
 
 
@@ -188,12 +197,12 @@ wss.on('connection', function connection(ws : websocketprops) {
     ws.email = response.email ;
     allSocket.push(ws) ;
 
-    if (response.type == "join"){
+    if (response.type == "peer_join"){
       ws.email = response.payload.email ; 
       peerRoom.push(ws) ;
     }
 
-    if (response.type == "chat"){
+    if (response.type == "peer_chat"){
       const userfound =  peerRoom.map((socket : websocketprops) => socket.email == ws.email) ;
       if (userfound){
         peerRoom.forEach((socket : websocketprops) => {
@@ -204,24 +213,8 @@ wss.on('connection', function connection(ws : websocketprops) {
       }
     }
 
-    if (response.type == "exit"){
+    if (response.type == "peer_exit"){
       peerRoom = peerRoom.filter((socket: websocketprops) => socket.email !== ws.email);
-    }
-
-     if (response.type === "private_chat") {
-      const { recipientEmail, message } = response.payload;
-
-      const recipientWs = allSocket.find((socket: websocketprops) => socket.email === recipientEmail);
-
-      if (recipientWs) {
-        recipientWs.send(JSON.stringify({
-          type: 'private_chat',
-          payload: {
-            senderEmail: ws.email,
-            message
-          }
-        }));
-      }
     }
 
     if (response.type == "private_chat"){
