@@ -15,6 +15,7 @@ import CounselorSignup from './components/Pages/counsclersignup.jsx';
 import CounselorLogin from './components/Pages/counselorlogin.jsx';
 import StudentSignup from './components/Pages/studentsignup.jsx';
 import Appointments from './components/Pages/myappointment.jsx';
+import ScreeningTool from './components/Pages/test.js';
 
 export default function App() {
   // 2. We no longer need useState or the renderPage function
@@ -32,6 +33,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/chat" element={<FirstAidChat />} />
+            <Route path='/test' element = {<ScreeningTool/>}/>
             <Route path="/booking" element={<BookingSystem />} />
             <Route path="/resources" element={<ResourceHub />} />
             <Route path="/forum" element={<PeerForum />} />
