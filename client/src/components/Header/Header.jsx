@@ -85,8 +85,8 @@ const Header = () => {
                   <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                     {/* 8. Replace anchor tags with Link components in the dropdown */}
                     <Link to="/admin" onClick={closeDropdown} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Admin Login</Link>
-                    <Link to="/login/student" onClick={closeDropdown} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Student Login</Link>
-                    <Link to="/login/counselor" onClick={closeDropdown} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Counselor Login</Link>
+                    <Link to="/student/login" onClick={closeDropdown} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Student Login</Link>
+                    <Link to="/counselor/login" onClick={closeDropdown} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Counselor Login</Link>
                   </div>
                 </div>
               )}

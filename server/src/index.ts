@@ -58,7 +58,7 @@ app.post("/student/signup" , async (req , res) => {
   }
 })
 
-app.post('/student/signin' , async(req , res) => {
+app.post('/student/login' , async(req , res) => {
   const {email , password} = req.body ;
   const response: any = await userModel.findOne({
     email : email 
