@@ -84,7 +84,7 @@ app.post('/student/signin' , async(req , res) => {
     }
 })
 
-app.post("/counselor/signup", async (req, res) => {           //counselor sign in
+app.post("/counselor/signup", async (req, res) => {
   const inputCheck = z.object({
     name: z.string().min(3),
     email: z.string().email(),
@@ -93,8 +93,7 @@ app.post("/counselor/signup", async (req, res) => {           //counselor sign i
     street: z.string().min(3),
     city: z.string().min(2),
     pincode: z.number(),
-    videocallsessionfee: z.number(),
-    offlinesessionfee: z.number()
+    
   });
 
   const parsed = inputCheck.safeParse(req.body);
@@ -103,7 +102,7 @@ app.post("/counselor/signup", async (req, res) => {           //counselor sign i
     return res.json({ message: parsed.error });
   }
 
-  const { name, email, password, clinicName, street, city, pincode, videocallsessionfee, offlinesessionfee } = parsed.data;
+  const { name, email, password, clinicName, street, city, pincode } = parsed.data;
 
   try {
     const existing = await counselorModel.findOne({ email });
@@ -121,15 +120,14 @@ app.post("/counselor/signup", async (req, res) => {           //counselor sign i
       street,
       city,
       pincode,
-      videocallsessionfee,
-      offlinesessionfee
     });
 
     res.json({ message: "Counselor account created successfully" });
   } catch (err) {
-    res.json({ message: "Error creating counselor", error: err });       
+    res.json({ message: "Error creating counselor", error: err });
   }
 });
+
 
 
 app.post("/counselor/login", async (req, res) => {         //counselor login            
