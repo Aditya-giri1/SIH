@@ -16,8 +16,8 @@ const counselorSchema = new Schema ({
   street : {type : String , require : true} ,
   city : {type : String , require : true} ,
   pincode : {type : Number , require : true} ,
-  videocallsessionfee : {type : Number , require : true} ,
-  offlinesessionfee : {type : Number , require : true}
+  //videocallsessionfee : {type : Number , require : true} ,
+  //offlinesessionfee : {type : Number , require : true}
 })
 
 const resourseSchema = new Schema ({
