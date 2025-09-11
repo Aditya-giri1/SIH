@@ -14,6 +14,7 @@ import './App.css';
 import CounselorSignup from './components/Pages/counsclersignup.jsx';
 import CounselorLogin from './components/Pages/counselorlogin.jsx';
 import StudentSignup from './components/Pages/studentsignup.jsx';
+import Appointments from './components/Pages/myappointment.jsx';
 
 export default function App() {
   // 2. We no longer need useState or the renderPage function
@@ -39,6 +40,7 @@ export default function App() {
             <Route path='/counselor/login' element={<CounselorLogin name = "Counselor"/>}/>
             <Route path='/student/login' element={<CounselorLogin name = "Student"/>}/>
             <Route path='/student/signup' element={< StudentSignup/>}/> 
+            <Route path='/myappointment' element={<Appointments/>}/>
             {/* You can add more routes for student/counselor login here */}
             {/* e.g. <Route path="/login/student" element={<StudentLoginPage />} /> */}
           </Routes>

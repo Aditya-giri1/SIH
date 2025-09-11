@@ -215,52 +215,59 @@ wss.on('connection', function connection(ws : websocketprops) {
       peerRoom = peerRoom.filter((socket: websocketprops) => socket.email !== ws.email);
     }
 
-    if (response.type == "private_chat"){
-      const {from , to} = response.payload ;
+    // Handle private chat creation
+    if (response.type === "private_chat") {
+      const { from, to } = response.payload;
+      ws.email = from;
 
-      const roomId = [from , to].sort().join("_") ;
+      if (!allSocket.includes(ws)) {
+        allSocket.push(ws);
+      }
+
+      const roomId = [from, to].sort().join("_");
 
       if (!allRooms[roomId]) {
-       allRooms[roomId] = [];
+        allRooms[roomId] = [];
+      }
+      if (!allRooms[roomId].includes(ws)) {
+        allRooms[roomId].push(ws);
       }
 
-      if (!allRooms[roomId].includes(ws)){
-        allRooms[roomId].push(ws) ; 
+      const recipientWs = allSocket.find((s : websocketprops) => s.email === to);
+      if (recipientWs && !allRooms[roomId].includes(recipientWs)) {
+        allRooms[roomId].push(recipientWs);
       }
 
-      const recipientWs = allSocket.find((socket: websocketprops) => socket.email === to);
-
-      if (!allRooms[roomId].includes(recipientWs)) {
-        allRooms[roomId].push(recipientWs) ;
-      }
-
-        allRooms[roomId].forEach((client : websocketprops) => {
+      allRooms[roomId].forEach((client : websocketprops) => {
         client.send(
-        JSON.stringify({
-        type: "chat_created",
-        roomId,
-        participants: [from, to],
-      })
-    );
-  }) ;
-      
+          JSON.stringify({
+            type: "chat_created",
+            roomId,
+            participants: [from, to],
+          })
+        );
+      });
     }
 
+    // Handle private message
     if (response.type === "private_msg") {
       const { roomId, message, sender } = response.payload;
       if (allRooms[roomId]) {
         allRooms[roomId].forEach((client : websocketprops) => {
-          client.send(JSON.stringify({
-            type: "message",
-            roomId,
-            sender,
-            message
-          }));
+          client.send(
+            JSON.stringify({
+              type: "message",
+              roomId,
+              sender,
+              message,
+            })
+          );
         });
       }
     }
 
-  });
+  
+}) ;
 
 });
 
