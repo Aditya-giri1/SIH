@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { mockCounselors } from '../../data/mockData';
 
 const BookingSystem = () => {
@@ -15,6 +15,10 @@ const BookingSystem = () => {
       }
   }
 
+  useEffect(() => {
+    
+  } , []) ;
+
   if (isBooked) {
       return (
           <div className="text-center p-8 bg-white rounded-lg shadow-xl max-w-lg mx-auto my-12">
@@ -22,7 +26,7 @@ const BookingSystem = () => {
               <p className="mt-4 text-gray-700">Your session with <strong>{selectedCounselor.name}</strong> is booked for <strong>{selectedDate.toDateString()}</strong> at <strong>{selectedTime}</strong>.</p>
               <p className="mt-2 text-sm text-gray-500">A confirmation email with details has been sent to your student address. All sessions are confidential.</p>
               <button onClick={() => { setIsBooked(false); setSelectedCounselor(null); setSelectedTime(null); }} className="mt-6 bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700">
-                  Book Another
+                  Close
               </button>
           </div>
       )

@@ -1,7 +1,7 @@
 export const mockCounselors = [
   { id: 1, name: 'Dr. Anya Sharma', specialty: 'Anxiety & Stress', available: true, image: 'https://placehold.co/100x100/E0E7FF/4F46E5?text=Dr.+S' },
   { id: 2, name: 'Mr. Rohan Verma', specialty: 'Depression & Burnout', available: true, image: 'https://placehold.co/100x100/DBEAFE/1D4ED8?text=Mr.+V' },
-  { id: 3, name: 'Ms. Priya Singh', specialty: 'Academic Stress', available: false, image: 'https://placehold.co/100x100/E0F2FE/0891B2?text=Ms.+S' },
+  { id: 3, name: 'Ms. Priya Singh', specialty: 'Academic Stress', available: false, image: 'https://placehold.co/100x100/E0F2FE/0891B2?text=Ms.+S' },  
 ];
 
 export const mockResources = [
