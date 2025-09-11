@@ -1,8 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { icons } from '../../utils/icons';
 import FeatureCard from '../UI/FeatureCard';
 
-const HomePage = ({ setCurrentPage }) => {
+const HomePage = () => {
+    const navigate = useNavigate();
+
     return (
         <div className="bg-indigo-50 min-h-screen">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
@@ -12,14 +15,20 @@ const HomePage = ({ setCurrentPage }) => {
                 <p className="mt-6 max-w-2xl mx-auto text-lg text-gray-600">
                     A confidential, stigma-free platform designed for students. Get immediate support, connect with counselors, access resources, and join a supportive peer community. You are not alone.
                 </p>
-                <div className="mt-10 max-w-md mx-auto sm:flex sm:justify-center md:mt-12">
+                <div className="mt-10 max-w-md mx-auto sm:flex sm:justify-center md:mt-12 gap-4">
                     <div className="rounded-md shadow">
-                        <a href='/chat' role='button' className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10 transition-transform transform hover:scale-105">
+                        <button
+                            onClick={() => navigate('/chat')}
+                            className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10 transition-transform transform hover:scale-105"
+                        >
                             Chat with AI Helper
-                        </a>
+                        </button>
                     </div>
                     <div className="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
-                        <button onClick={() => setCurrentPage('resources')} className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-indigo-50 md:py-4 md:text-lg md:px-10">
+                        <button
+                            onClick={() => navigate('/resources')}
+                            className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-indigo-50 md:py-4 md:text-lg md:px-10 transition-transform transform hover:scale-105"
+                        >
                             Explore Resources
                         </button>
                     </div>
@@ -32,25 +41,25 @@ const HomePage = ({ setCurrentPage }) => {
                         icon={icons.chat}
                         title="AI First-Aid"
                         description="Get immediate, guided support from our friendly AI chat for coping strategies and initial help."
-                        onClick={() => setCurrentPage('chat')}
+                        onClick={() => navigate('/chat')}
                     />
                     <FeatureCard
                         icon={icons.calendar}
                         title="Book a Session"
                         description="Confidentially book appointments with certified on-campus counselors at your convenience."
-                         onClick={() => setCurrentPage('booking')}
+                        onClick={() => navigate('/booking')}
                     />
                     <FeatureCard
                         icon={icons.book}
                         title="Resource Hub"
                         description="Access a curated library of videos, audio guides, and articles on mental wellness."
-                         onClick={() => setCurrentPage('resources')}
+                        onClick={() => navigate('/resources')}
                     />
                     <FeatureCard
                         icon={icons.users}
                         title="Peer Forum"
                         description="Connect with fellow students in a moderated, anonymous forum to share experiences and support."
-                         onClick={() => setCurrentPage('forum')}
+                        onClick={() => navigate('/forum')}
                     />
                 </div>
             </div>
