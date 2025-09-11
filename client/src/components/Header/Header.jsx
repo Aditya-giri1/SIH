@@ -65,7 +65,11 @@ const Header = () => {
                 >
                   {item.label}
                 </Link>
+                
               ))}
+              <div>
+                <div id="google_translate_element"></div>
+              </div>
             </div>
             {/* Dropdown Section */}
             <div className="ml-8 relative" ref={dropdownRef}>

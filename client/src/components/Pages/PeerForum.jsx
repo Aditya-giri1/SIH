@@ -17,7 +17,6 @@ const PeerForum = () => {
 
     async function gettingEmail() {
         const token = localStorage.getItem("token") ;
-        console.log(token) ;
         const response = await axios.get("http://localhost:3001/forum" , {
             headers : {
                 Authorization : token ,
