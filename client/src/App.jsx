@@ -11,6 +11,8 @@ import ResourceHub from './components/Pages/ResourceHub.jsx';
 import PeerForum from './components/Pages/PeerForum.jsx';
 import AdminDashboard from './components/Pages/AdminDashboard.jsx';
 import './App.css';
+import CounselorSignup from './components/Pages/counsclersignup.jsx';
+import CounselorLogin from './components/Pages/counselorlogin.jsx';
 
 export default function App() {
   // 2. We no longer need useState or the renderPage function
@@ -32,6 +34,9 @@ export default function App() {
             <Route path="/resources" element={<ResourceHub />} />
             <Route path="/forum" element={<PeerForum />} />
             <Route path="/admin" element={<AdminDashboard />} />
+            <Route path='/counselor/signup' element={<CounselorSignup/>}/>
+            <Route path='/counselor/login' element={<CounselorLogin name = "Counselor"/>}/>
+            <Route path='/student/login' element={<CounselorLogin name = "Student"/>}/>
             {/* You can add more routes for student/counselor login here */}
             {/* e.g. <Route path="/login/student" element={<StudentLoginPage />} /> */}
           </Routes>
