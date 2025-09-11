@@ -1,41 +1,43 @@
-import React, { useState } from 'react';
-import Header from './components/Header/Header';
-import HomePage from './components/Pages/HomePage';
-import FirstAidChat from './components/Pages/FirstAidChat';
-import BookingSystem from './components/Pages/BookingSystem';
-import ResourceHub from './components/Pages/ResourceHub';
-import PeerForum from './components/Pages/PeerForum';
-import AdminDashboard from './components/Pages/AdminDashboard';
+import React from 'react';
+// 1. Import routing components from react-router-dom
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+// Import your page components with file extensions for clarity
+import Header from './components/Header/Header.jsx';
+import HomePage from './components/Pages/HomePage.jsx';
+import FirstAidChat from './components/Pages/FirstAidChat.jsx';
+import BookingSystem from './components/Pages/BookingSystem.jsx';
+import ResourceHub from './components/Pages/ResourceHub.jsx';
+import PeerForum from './components/Pages/PeerForum.jsx';
+import AdminDashboard from './components/Pages/AdminDashboard.jsx';
 import './App.css';
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState('home');
-
-  const renderPage = () => {
-    switch (currentPage) {
-      case 'home':
-        return <HomePage setCurrentPage={setCurrentPage} />;
-      case 'chat':
-        return <FirstAidChat />;
-      case 'booking':
-        return <BookingSystem />;
-      case 'resources':
-        return <ResourceHub />;
-      case 'forum':
-        return <PeerForum />;
-      case 'dashboard':
-        return <AdminDashboard />;
-      default:
-        return <HomePage setCurrentPage={setCurrentPage} />;
-    }
-  };
+  // 2. We no longer need useState or the renderPage function
+  // const [currentPage, setCurrentPage] = useState('home');
+  // const renderPage = () => { ... };
 
   return (
-    <div className="bg-gray-100 font-sans antialiased">
-      <Header currentPage={currentPage} setCurrentPage={setCurrentPage} />
-      <main className="min-h-[calc(100vh-4rem)]">
-        {renderPage()}
-      </main>
-    </div>
+    // 3. Wrap your entire app in the Router component
+    <Router>
+      <div className="bg-gray-100 font-sans antialiased">
+        {/* Header is outside of Routes, so it appears on every page */}
+        <Header />
+        <main className="min-h-[calc(100vh-4rem)]">
+          {/* 4. Use the Routes component to define all possible routes */}
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/chat" element={<FirstAidChat />} />
+            <Route path="/booking" element={<BookingSystem />} />
+            <Route path="/resources" element={<ResourceHub />} />
+            <Route path="/forum" element={<PeerForum />} />
+            <Route path="/admin" element={<AdminDashboard />} />
+            {/* You can add more routes for student/counselor login here */}
+            {/* e.g. <Route path="/login/student" element={<StudentLoginPage />} /> */}
+          </Routes>
+        </main>
+      </div>
+    </Router>
   );
 }
+
