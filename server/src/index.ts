@@ -201,7 +201,7 @@ wss.on('connection', function connection(ws : websocketprops) {
     }
 
     if (response.type == "peer_chat"){
-      const userfound =  peerRoom.map((socket : websocketprops) => socket.email == ws.email) ;
+      const userfound =  peerRoom.some((socket : websocketprops) => socket.email == ws.email) ;
       if (userfound){
         peerRoom.forEach((socket : websocketprops) => {
         if (socket.readyState == 1){
