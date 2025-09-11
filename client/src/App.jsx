@@ -15,7 +15,7 @@ import CounselorSignup from './components/Pages/counsclersignup.jsx';
 import CounselorLogin from './components/Pages/counselorlogin.jsx';
 import StudentSignup from './components/Pages/studentsignup.jsx';
 import Appointments from './components/Pages/myappointment.jsx';
-import ScreeningTool from './components/Pages/test.js';
+import ScreeningTool from './components/Pages/test.jsx';
 
 export default function App() {
   // 2. We no longer need useState or the renderPage function
