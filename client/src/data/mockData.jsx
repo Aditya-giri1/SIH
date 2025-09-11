@@ -1,3 +1,7 @@
+import sleepMusic from './sleep-music-vol16-195422.mp3';
+
+
+
 export const mockCounselors = [
   { id: 1, name: 'Dr. Anya Sharma', specialty: 'Anxiety & Stress', available: true, image: 'https://placehold.co/100x100/E0E7FF/4F46E5?text=Dr.+S' },
   { id: 2, name: 'Mr. Rohan Verma', specialty: 'Depression & Burnout', available: true, image: 'https://placehold.co/100x100/DBEAFE/1D4ED8?text=Mr.+V' },
@@ -5,12 +9,13 @@ export const mockCounselors = [
 ];
 
 export const mockResources = [
-  { id: 1, type: 'video', title: '5-Minute Guided Meditation for Anxiety', category: 'Anxiety', url: '#', duration: '5 min' },
-  { id: 2, type: 'audio', title: 'Calming Sounds for Deep Sleep', category: 'Sleep', url: '#', duration: '30 min' },
-  { id: 3, type: 'guide', title: 'Managing Exam Stress Effectively', category: 'Academic Stress', url: '#' },
-  { id: 4, type: 'video', title: 'Understanding Burnout and How to Combat It', category: 'Burnout', url: '#', duration: '12 min' },
-  { id: 5, type: 'guide', title: 'Building Healthy Social Connections in College', category: 'Social Isolation', url: '#' },
-  { id: 6, type: 'audio', title: 'Mindful Breathing Exercise', category: 'Stress', url: '#', duration: '10 min' },
+  { id: 1, type: 'video', title: '5-Minute Guided Meditation for Anxiety', category: 'Anxiety', url: 'https://youtu.be/MR57rug8NsM', duration: '5 min' },
+  { id: 2, type: 'audio', title: 'Calming Sounds for Deep Sleep', category: 'Sleep', url: sleepMusic, duration: '20 min' },
+  { id: 3, type: 'guide', title: 'Managing Exam Stress Effectively', category: 'Academic Stress', url: 'https://www.nhs.uk/mental-health/children-and-young-adults/advice-for-parents/help-your-child-beat-exam-stress/' },
+  { id: 4, type: 'video', title: 'Understanding Burnout and How to Combat It', category: 'Burnout', url: 'https://youtu.be/cFjK5WLpSHE', duration: '6 min' },
+  { id: 5, type: 'guide', title: 'Building Healthy Social Connections in College', category: 'Social Isolation', url: 'https://www.talktoangel.com/blog/5-professional-tips-to-make-meaningful-connections-in-college' },
+  { id: 6, type: 'audio', title: 'Mindful Breathing Exercise', category: 'Stress', url: 'https://www.cci.health.wa.gov.au/~/media/CCI/Audio-files/Mindfulnessofthebreath.mp3', duration: '10 min' },
+  
 ];
 
 export const mockForumPosts = [
