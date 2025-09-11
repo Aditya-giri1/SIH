@@ -5,7 +5,7 @@ const userSchema = new Schema ({
   name : {type : String , require : true} ,
   email : {type : String , unique : true , require : true} ,
   password : {type : String , require : true} ,
-  avtar : {type : String , require : true}
+  avatar : {type : String , require : true}
 })
 
 const counselorSchema = new Schema ({

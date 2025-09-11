@@ -20,14 +20,15 @@ export default function CounselorLogin({name}) {
     console.log("Login Data:", formData);
     // 👉 Send formData to backend (e.g., axios.post("/api/counselors/login", formData))
     if (name == "Counselor"){
-      const response = await axios.post("http://localhost:3001/counselor/login" , formData) ;
+      const response = await axios.post("http://localhost:3001/counselor/signin" , formData) ;
       if (response.statusText == "OK"){
       navigate("/") ;
     }
     }
     if (name == "Student"){
-    const response = await axios.post("http://localhost:3001/student/login" , formData) ;
+    const response = await axios.post("http://localhost:3001/student/signin" , formData) ;
     if (response.statusText == "OK"){
+      localStorage.setItem("token" , response.data.token) ;
       navigate("/") ;
     }
     }

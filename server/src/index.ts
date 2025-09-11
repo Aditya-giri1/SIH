@@ -5,33 +5,44 @@ import bcrypt from "bcrypt"
 import mongoose from "mongoose";
 import {userModel} from "./db"
 import  jwt  from "jsonwebtoken";
+import cors from "cors"
 import "dotenv/config"
+
+let corsOptions = {
+  "origin": "http://localhost:5173",
+  "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+  "preflightContinue": false,
+  "optionsSuccessStatus": 204
+}
+
 
 const app = express() ;
 const wss = new WebSocketServer({port : 8080}) ;
 app.use(express.json()) ;
+app.use(cors(corsOptions)) ;
 
 app.get("/" , (req , res) => {
 
 })
 
-app.post("/signup" , async (req , res) => {
-  const {name , password , email} = req.body ;
+app.post("/student/signup" , async (req , res) => {
+  const {name , password , email , avatar} = req.body ;
   const inputcheck = z.object({
     name : z.string().min(5) ,
     password : z.string().min(6).max(15) ,
-    email : z.string().email()
+    email : z.string().email() ,
+    avatar : z.string() 
   })
   console.log("hello")
   const finalcheck = inputcheck.safeParse(req.body) ;
-  console.log(finalcheck) ;
   if (finalcheck.success){
 
     const hashedpassword = bcrypt.hashSync(password , 5) ;
     await userModel.create({
       name : name ,
       password : hashedpassword ,
-      email : email 
+      email : email ,
+      avatar : avatar
     })
     res.json({
       message : "Account Created Successfully"
@@ -44,7 +55,7 @@ app.post("/signup" , async (req , res) => {
   }
 })
 
-app.post('/signin' , async(req , res) => {
+app.post('/student/signin' , async(req , res) => {
   const {email , password} = req.body ;
   const response: any = await userModel.findOne({
     email : email 
