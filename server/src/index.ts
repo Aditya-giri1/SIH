@@ -4,8 +4,10 @@ import z, { any, string } from "zod";
 import bcrypt from "bcrypt"
 import mongoose from "mongoose";
 import {userModel} from "./db"
+import {counselorModel} from "./db"
 import  jwt  from "jsonwebtoken";
 import "dotenv/config"
+
 
 const app = express() ;
 const wss = new WebSocketServer({port : 8080}) ;
@@ -15,7 +17,7 @@ app.get("/" , (req , res) => {
 
 })
 
-app.post("/signup" , async (req , res) => {
+app.post("/signup" , async (req , res) => {            //user signup
   const {name , password , email} = req.body ;
   const inputcheck = z.object({
     name : z.string().min(5) ,
@@ -44,7 +46,7 @@ app.post("/signup" , async (req , res) => {
   }
 })
 
-app.post('/signin' , async(req , res) => {
+app.post('/signin' , async(req , res) => {            //user login
   const {email , password} = req.body ;
   const response: any = await userModel.findOne({
     email : email 
@@ -69,6 +71,93 @@ app.post('/signin' , async(req , res) => {
       })
     }
 })
+
+app.post("/counselor/signup", async (req, res) => {           //counselor sign in
+  const inputCheck = z.object({
+    name: z.string().min(3),
+    email: z.string().email(),
+    password: z.string().min(6).max(15),
+    clinicName: z.string().min(3),
+    street: z.string().min(3),
+    city: z.string().min(2),
+    pincode: z.number(),
+    videocallsessionfee: z.number(),
+    offlinesessionfee: z.number()
+  });
+
+  const parsed = inputCheck.safeParse(req.body);
+
+  if (!parsed.success) {
+    return res.json({ message: parsed.error });
+  }
+
+  const { name, email, password, clinicName, street, city, pincode, videocallsessionfee, offlinesessionfee } = parsed.data;
+
+  try {
+    const existing = await counselorModel.findOne({ email });
+    if (existing) {
+      return res.json({ message: "Email already registered" });
+    }
+
+    const hashedPassword = bcrypt.hashSync(password, 5);
+
+    await counselorModel.create({
+      name,
+      email,
+      password: hashedPassword,
+      clinicName,
+      street,
+      city,
+      pincode,
+      videocallsessionfee,
+      offlinesessionfee
+    });
+
+    res.json({ message: "Counselor account created successfully" });
+  } catch (err) {
+    res.json({ message: "Error creating counselor", error: err });       
+  }
+});
+
+
+app.post("/counselor/login", async (req, res) => {         //counselor login            
+  const inputCheck = z.object({
+    email: z.string().email(),
+    password: z.string().min(6).max(15)
+  });
+
+  const parsed = inputCheck.safeParse(req.body);
+
+  if (!parsed.success) {
+    return res.json({ message: parsed.error });
+  }
+
+  const { email, password } = parsed.data;
+
+  try {
+    const counselor: any = await counselorModel.findOne({ email });
+    if (!counselor) {
+      return res.json({ message: "No counselor found with this email" });
+    }
+
+    const validPass = bcrypt.compareSync(password, counselor.password);
+    if (!validPass) {
+      return res.json({ message: "Incorrect password" });
+    }
+
+    const token = jwt.sign({ id: counselor._id, role: "counselor" }, process.env.JWT_SECRET as string);
+
+    res.json({
+      token,
+      message: "Counselor logged in successfully"
+    });
+  } catch (err) {
+    res.json({ message: "Error logging in", error: err });
+  }
+});
+
+
+
 
 interface websocketprops extends WebSocket {
   email : string

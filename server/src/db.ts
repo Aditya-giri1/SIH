@@ -26,4 +26,4 @@ const resourseSchema = new Schema ({
 
 
 export const userModel = model("user" , userSchema) ;
-
+export const counselorModel = model("counselor" , counselorSchema) ;
