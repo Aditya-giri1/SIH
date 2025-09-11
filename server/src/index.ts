@@ -128,8 +128,6 @@ app.post("/counselor/signup", async (req, res) => {
   }
 });
 
-
-
 app.post("/counselor/login", async (req, res) => {         //counselor login            
   const inputCheck = z.object({
     email: z.string().email(),
@@ -206,7 +204,6 @@ wss.on('connection', function connection(ws : websocketprops) {
       );
       if (userfound) {
         peerRoom.forEach((socket: websocketprops) => {
-          // ✅ send to everyone EXCEPT the sender
           if (socket.readyState === 1 && socket !== ws) {
             socket.send(response.payload.message);
           }
@@ -258,7 +255,9 @@ wss.on('connection', function connection(ws : websocketprops) {
       const { roomId, message, sender } = response.payload;
       if (allRooms[roomId]) {
         allRooms[roomId].forEach((client : websocketprops) => {
-          client.send(
+          if (client.readyState == 1 && client !== ws)
+          {
+            client.send(
             JSON.stringify({
               type: "message",
               roomId,
@@ -266,6 +265,7 @@ wss.on('connection', function connection(ws : websocketprops) {
               message,
             })
           );
+          }
         });
       }
     }
